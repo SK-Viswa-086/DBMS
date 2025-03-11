@@ -1,0 +1,12 @@
+CREATE TABLE employees (emp_id INT PRIMARY KEY,emp_name VARCHAR(50),emp_salary DECIMAL(10, 2),emp_department_id INT);
+CREATE TABLE departments (department_id INT PRIMARY KEY,department_name VARCHAR(50));
+INSERT INTO employees (emp_id, emp_name, emp_salary, emp_department_id) VALUES(1, 'John Doe', 50000.00, 1),(2, 'Jane Smith', 55000.00, 2),(3, 'Alice Johnson', 60000.00, 1),(4, 'Bob Brown', 70000.00, 3),(5, 'Charlie White', 45000.00, 2);
+INSERT INTO departments (department_id, department_name) VALUES(1, 'IT'),(2, 'HR'),(3, 'Finance');
+SELECT emp_name FROM employees WHERE emp_department_id IN (SELECT department_id FROM departments WHERE department_name IN ('IT', 'HR'));
+SELECT emp_name FROM employees WHERE emp_department_id NOT IN (SELECT department_id FROM departments WHERE department_name IN ('IT', 'HR'));
+SELECT emp_name, emp_salary FROM employees WHERE emp_salary> SOME (SELECT emp_salary FROM employees WHERE emp_department_id = 2);
+SELECT emp_name, emp_salary FROM employees WHERE emp_salary> ALL (SELECT emp_salary FROM employees WHERE emp_department_id = 2);
+SELECT emp_name FROM employees e WHERE EXISTS (SELECT 1 FROM departments d WHERE d.department_name = 'IT' AND e.emp_department_id = d.department_id);
+SELECT emp_name FROM employees e WHERE NOT EXISTS (SELECT 1 FROM departments d WHERE d.department_name = 'Marketing' AND e.emp_department_id = d.department_id);
+SELECT DISTINCT emp_department_id FROM employees;
+SELECT emp_department_id, COUNT(*) AS count  FROM employees  GROUP BY emp_department_id  HAVING COUNT(*) > 1;
